@@ -1,4 +1,6 @@
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +24,7 @@ public class FileIO {
         try (FileOutputStream fos = new FileOutputStream(file);
              BufferedOutputStream bos = new BufferedOutputStream(fos)) {
 
-            byte[] bytes = content.getBytes();
+            byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
 
             bos.write(bytes, 0, bytes.length);
 
@@ -32,25 +34,25 @@ public class FileIO {
         }
     }
 
+    /*
+    기존에는 버퍼의 크기를 4096바이트로 하고 가져왔는데
+    이렇게 하면 한글이 깨질 가능성이 있다고 해서
+    메모리의 크기가 받쳐주는 안에서는 아래처럼 한꺼번에 가져와도 된다고 한다.
+    그리고 가능하면 인코딩 방식도 맞춰주는 것이 좋다.
+     */
     public static List<WiseSaying> fileInput() {
         String data = null;
         File dataFile = new File(path + "data.json");
 
-        try (FileInputStream fis = new FileInputStream(dataFile);
-             BufferedInputStream bis = new BufferedInputStream(fis)) {
+        try (FileInputStream fis = new FileInputStream(dataFile)) {
 
-            byte[] bufferArr = new byte[4096];
-            StringBuilder sb = new StringBuilder();
+            byte[] bufferArr = fis.readAllBytes();
 
-            while (bis.read(bufferArr) != -1) {
-                sb.append(new String(bufferArr));
-            }
-
-            data = sb.toString();
+            data = new String(bufferArr, StandardCharsets.UTF_8);
 
         } catch (IOException e) {
             System.out.println("***파일 읽기에 실패했습니다.***");
-            System.out.println(e.getMessage());
+            System.out.println("에러: " + e.getMessage());
         }
 
         return jsonParsing(data);
@@ -100,16 +102,17 @@ public class FileIO {
             return wiseSayings;
         }
 
-        String[] dataSplit = data.replaceAll("[\\[\\s]", "").split("\\{");
+        String[] dataSplit = data.replaceAll("[\\[\t\n]", "").split("\\{");
 
         for (String s : dataSplit) {
-            if (s.isEmpty()) {
+            if (s.trim().isEmpty()) {
                 continue;
             }
 
             String[] parsing = Arrays.stream(s.split(","))
                     .map(str ->
                             str.split(":")[1]
+                                    .trim()
                                     .replaceAll("[\"}\\]]", ""))
                     .toArray(String[]::new);
 

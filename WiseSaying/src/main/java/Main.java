@@ -59,10 +59,15 @@ public class Main {
     private static void getList(List<WiseSaying> wiseSayings) {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("---------------------------");
+
+        if (wiseSayings == null || wiseSayings.isEmpty()) {
+            return;
+        }
+
         for (int i = wiseSayings.size() - 1; i >= 0; i--) {
             WiseSaying wiseSaying = wiseSayings.get(i);
 
-            if (wiseSaying == null) {
+            if (wiseSaying == null || wiseSaying.getNo() == 0) {
                 continue;
             }
 
@@ -78,7 +83,7 @@ public class Main {
             int id = getId(input);
             validId(wiseSayings, id);
 
-            wiseSayings.set(id - 1, null);
+            wiseSayings.set(id - 1, new WiseSaying(0, "", ""));
 
             System.out.println(id + "번 명언이 삭제되었습니다.");
 
