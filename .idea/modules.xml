@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/WiseSaying.iml" filepath="$PROJECT_DIR$/WiseSaying.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/WiseSaying.main.iml" filepath="$PROJECT_DIR$/.idea/modules/WiseSaying.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/WiseSaying.test.iml" filepath="$PROJECT_DIR$/.idea/modules/WiseSaying.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/p-47-mission-2-260709.iml" filepath="$PROJECT_DIR$/p-47-mission-2-260709.iml" />
+    </modules>
+  </component>
+</project>
