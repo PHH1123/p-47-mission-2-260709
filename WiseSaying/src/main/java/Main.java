@@ -51,64 +51,10 @@ public class Main {
         WiseSaying wiseSaying = new WiseSaying(wiseSayings.size() + 1, author, content);
         wiseSayings.add(wiseSaying);
 
-        jsonOutput(wiseSaying);
-        txtOutput(wiseSaying.getNo());
-
+        FileIO.jsonOutput(wiseSaying);
+        FileIO.txtOutput(wiseSaying.getNo());
 
         System.out.println(wiseSaying.getNo() + "번 명언이 등록되었습니다.");
-    }
-
-    private static void jsonOutput(WiseSaying wiseSaying) {
-        File jsonFile = new File(path + wiseSaying.getNo() + ".json");
-
-        String json = "{\n" +
-                "\t\"id\": " + wiseSaying.getNo() + ",\n" +
-                "\t\"content\": \"" + wiseSaying.getContent() + "\",\n" +
-                "\t\"author\": \"" + wiseSaying.getAuthor() + "\"\n" +
-                "}";
-
-        fileOutput(jsonFile, json);
-    }
-
-    private static void txtOutput(int no) {
-        File txtFile = new File(path + "lastId.txt");
-
-        String txt = String.valueOf(no);
-
-        fileOutput(txtFile, txt);
-    }
-
-    private static void fileOutput(File file, String content) {
-        FileOutputStream fos = null;
-        BufferedOutputStream bos = null;
-
-        try {
-            fos = new FileOutputStream(file);
-            bos = new BufferedOutputStream(fos);
-
-            byte[] bytes = content.getBytes();
-
-            bos.write(bytes, 0, bytes.length);
-
-        } catch (IOException e) {
-            System.out.println("***파일 저장에 실패했습니다.***");
-            System.out.println(e.getMessage());
-        } finally {
-            if (bos != null) {
-                try {
-                    bos.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
     }
 
     private static void getList(List<WiseSaying> wiseSayings) {
@@ -159,7 +105,7 @@ public class Main {
             String author = sc.nextLine();
             wiseSaying.setAuthor(author);
 
-            jsonOutput(wiseSaying);
+            FileIO.jsonOutput(wiseSaying);
 
         } catch (RuntimeException e) {
             System.out.println(getId(input) + "번 명언은 존재하지 않습니다.");
