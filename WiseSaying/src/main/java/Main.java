@@ -37,6 +37,10 @@ public class Main {
                 case "수정":
                     update(sc, input, wiseSayings);
                     break;
+                case "빌드":
+                    FileIO.saveAllJsonOutput(wiseSayings);
+                    System.out.println("data.json 파일의 내용이 갱신되었습니다.");
+                    break;
             }
         }
     }
