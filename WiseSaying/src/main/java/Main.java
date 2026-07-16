@@ -1,8 +1,3 @@
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +10,7 @@ public class Main {
         System.out.println("== 명언 앱 ==");
         String input;
 
-        List<WiseSaying> wiseSayings = new ArrayList<>();
+        List<WiseSaying> wiseSayings = FileIO.fileInput();
 
         while (true) {
             System.out.print("명령) ");
