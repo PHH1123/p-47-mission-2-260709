@@ -9,11 +9,7 @@ public class Main {
         System.out.println("== 명언 앱 ==");
         String input;
 
-        List<String> contents = new ArrayList<>();
-        List<String> authors = new ArrayList<>();
-
         List<WiseSaying> wiseSayings = new ArrayList<>();
-
 
         while (true) {
             System.out.print("명령) ");
@@ -24,84 +20,88 @@ public class Main {
                 case "종료":
                     return;
                 case "등록":
-                    save(sc, wiseSayings, contents, authors);
+                    save(sc, wiseSayings);
                     break;
                 case "목록":
-                    getList(wiseSayings, contents, authors);
+                    getList(wiseSayings);
                     break;
                 case "삭제":
-                    delete(input, wiseSayings, contents, authors);
+                    delete(input, wiseSayings);
                     break;
                 case "수정":
-                    update(sc, input, wiseSayings, contents, authors);
+                    update(sc, input, wiseSayings);
                     break;
             }
         }
     }
 
-    private static void save(Scanner sc, List<WiseSaying> wiseSayings, List<String> contents, List<String> authors) {
+    private static void save(Scanner sc, List<WiseSaying> wiseSayings) {
         System.out.print("명언 : ");
         String content = sc.nextLine();
-//        contents.add(sc.nextLine());
+
         System.out.print("작가 : ");
         String author = sc.nextLine();
-//        authors.add(sc.nextLine());
+
         WiseSaying wiseSaying = new WiseSaying(wiseSayings.size() + 1, author, content);
         wiseSayings.add(wiseSaying);
 
         System.out.println(wiseSaying.getNo() + "번 명언이 등록되었습니다.");
     }
 
-    private static void getList(List<WiseSaying> wiseSayings, List<String> contents, List<String> authors) {
+    private static void getList(List<WiseSaying> wiseSayings) {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("---------------------------");
-        for (int i = wiseSayings.size(); i > 0; i--) {
-            if (wiseSayings.get(i - 1) == null) {
+        for (int i = wiseSayings.size() - 1; i >= 0; i--) {
+            WiseSaying wiseSaying = wiseSayings.get(i);
+
+            if (wiseSaying == null) {
                 continue;
             }
-            System.out.println(i + " / " +
-                    wiseSayings.get(i - 1).getAuthor() + " / " +
-                    wiseSayings.get(i - 1).getContent());
+
+            System.out.println(wiseSaying.getNo() + " / " +
+                    wiseSaying.getAuthor() + " / " +
+                    wiseSaying.getContent()
+            );
         }
     }
 
-    private static void delete(String input, List<WiseSaying> wiseSayings, List<String> contents, List<String> authors) {
+    private static void delete(String input, List<WiseSaying> wiseSayings) {
         try {
             int id = getId(input);
-            validId(wiseSayings, contents, id);
+            validId(wiseSayings, id);
 
-//            wiseSayings.get(id - 1).setContent(null);
-//            wiseSayings.get(id - 1).setAuthor(null);
             wiseSayings.set(id - 1, null);
-//            contents.set(id - 1, null);
-//            authors.set(id - 1, null);
+
             System.out.println(id + "번 명언이 삭제되었습니다.");
+
         } catch (RuntimeException e) {
             System.out.println(input.split("=")[1] + "번 명언은 존재하지 않습니다.");
         }
     }
 
-    private static void update(Scanner sc, String input, List<WiseSaying> wiseSayings, List<String> contents, List<String> authors) {
+    private static void update(Scanner sc, String input, List<WiseSaying> wiseSayings) {
         try {
             int id = getId(input);
-            validId(wiseSayings, contents, id);
+            validId(wiseSayings, id);
 
-            System.out.println("명언(기존) : " + wiseSayings.get(id - 1).getContent());
+            WiseSaying wiseSaying = wiseSayings.get(id - 1);
+
+            System.out.println("명언(기존) : " + wiseSaying.getContent());
             System.out.print("명언 : ");
             String content = sc.nextLine();
-            wiseSayings.get(id - 1).setContent(content);
-//            contents.set(id - 1, sc.nextLine());
-            System.out.println("작가(기존) : " + wiseSayings.get(id - 1).getAuthor());
+            wiseSaying.setContent(content);
+
+            System.out.println("작가(기존) : " + wiseSaying.getAuthor());
             System.out.print("작가 : ");
             String author = sc.nextLine();
-            wiseSayings.get(id - 1).setAuthor(author);
-//            authors.set(id - 1, sc.nextLine());
+            wiseSaying.setAuthor(author);
+
         } catch (RuntimeException e) {
             System.out.println(getId(input) + "번 명언은 존재하지 않습니다.");
         }
     }
 
-    private static void validId(List<WiseSaying> wiseSayings, List<String> contents, int id) {
+    private static void validId(List<WiseSaying> wiseSayings, int id) {
         if (wiseSayings.size() < id || wiseSayings.get(id - 1) == null) {
             throw new RuntimeException();
         }
